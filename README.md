@@ -1,7 +1,3 @@
-Here is your **README rewritten as one continuous section**, smoothly connected without separate headings, ready for GitHub:
-
----
-
 # LEAPD Pipeline (MATLAB)
 
 This repository provides a unified MATLAB-based framework for EEG preprocessing, feature extraction, classification, and correlation using the LEAPD (Linear Predictive Coding-based EEG Analysis for Prognosis and Diagnosis) method. It supports both binary classification tasks (such as predicting mortality: Deceased vs. Living subjects) and correlation analyses (assessing associations between LEAPD scores and clinical measures such as MoCA or UPDRS). The pipeline is designed to be modular, reproducible, and research-friendly. It includes optional EEG preprocessing using EEGLAB and ICLabel, with capabilities for detecting and removing noisy channels, applying ICA-based artifact rejection (blink, muscle, cardiac), performing line noise removal (60 Hz notch filtering), visualizing raw versus cleaned EEG, and automatically exporting cleaned EEG data to the `/cleaned_data/` folder. The core LEAPD pipeline performs automatic parameter search over filter ranges and LPC orders, supports single- and multi-channel analysis (1–10 channels), performs cross-validation and out-of-sample testing, applies polarity alignment for correlation, and evaluates comprehensive performance metrics, including ACC, AUC, SEN, SPC, PPV, NPV, Odds Ratio, LR⁺, Spearman’s rho, and p-values. The repository also includes result storage, report generation, and visualization utilities.
