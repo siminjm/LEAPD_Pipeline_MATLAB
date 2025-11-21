@@ -38,9 +38,10 @@ Optional preprocessing using EEGLAB and ICLabel, Automatic detection and removal
 To run the standalone preprocessing demo: cd Preprocessing then Demo.
 
 You can also call it manually: 
+```
 
 [X_clean, labels_clean, report, savePath] = pipeline_preprocessing(X_raw, Fs, labels);
-
+```
 ### LEAPD Pipeline
 Automatic parameter search over filter bands and LPC orders, Single- and multi-channel evaluation (1–10 channels), Cross-validation and out-of-sample testing, Comprehensive metrics: ACC, AUC, SEN, SPC, PPV, NPV, OR, LR⁺.
 
