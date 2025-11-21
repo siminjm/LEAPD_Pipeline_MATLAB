@@ -1,6 +1,5 @@
 # LEAPD Pipeline (MATLAB)
 
-<<<<<<< HEAD
 Unified training, testing, and preprocessing framework for EEG-based classification using the LEAPD method. Developed by Simin Jamshidi, University of Iowa, Departments of Electrical & Computer Engineering (ECE) and Neurology.
 
 ## Overview
@@ -28,24 +27,24 @@ The pipeline supports:
 - **Correlation analysis** (e.g., LEAPD indices vs clinical scores such as MoCA or UPDRS)
 
 ---
->>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
+
 
 ## Core Features
 
 ### Preprocessing
-<<<<<<< HEAD
+
 Optional preprocessing using EEGLAB and ICLabel, Automatic detection and removal of noisy channels, ICA-based artifact removal (blink, muscle, heart), Optional 60 Hz notch filter and harmonics suppression, Visualization of raw vs cleaned EEG signals, Automatic saving of cleaned EEG to /cleaned_data/.
 
 To run the standalone preprocessing demo: cd Preprocessing then Demo.
 
-You can also call it manually: [X_clean, labels_clean, report, savePath] = pipeline_preprocessing(X_raw, Fs, labels);
+You can also call it manually: 
+[X_clean, labels_clean, report, savePath] = pipeline_preprocessing(X_raw, Fs, labels);
 
 ### LEAPD Pipeline
 Automatic parameter search over filter bands and LPC orders, Single- and multi-channel evaluation (1–10 channels), Cross-validation and out-of-sample testing, Comprehensive metrics: ACC, AUC, SEN, SPC, PPV, NPV, OR, LR⁺.
 
 ## Repository Structure
 
-=======
 - Optional preprocessing using EEGLAB and ICLabel  
 - Automatic detection and removal of noisy channels  
 - ICA-based artifact removal (blink, muscle, heart)  
@@ -72,7 +71,6 @@ Demo
 
 ## Repository Structure
 ```
->>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
 LEAPD_Pipeline_MATLAB/
 ├── Preprocessing/                   # EEG artifact removal module
 │   ├── Demo.m
@@ -81,18 +79,15 @@ LEAPD_Pipeline_MATLAB/
 │   ├── remove_line_noise.m
 │   ├── README.md
 │   └── cleaned_data/
-<<<<<<< HEAD
 ├── main_train.m                     # LEAPD training script
 ├── main_test.m                      # LEAPD testing script
 ├── plot_results.m                   # Visualization
 ├── leapd_demo.m                     # Complete classification demo
-=======
 │
 ├── main_train.m                     # LEAPD training script
 ├── main_test.m                      # LEAPD testing script
 ├── plot_results.m                   # Visualization
 │
->>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
 ├── +utils/                          # Helper functions
 │   ├── load_data.m
 │   ├── filter_data.m
@@ -101,7 +96,6 @@ LEAPD_Pipeline_MATLAB/
 │   ├── build_hyperplanes.m
 │   ├── compute_leapd_scores.m
 │   ├── evaluate_classification.m
-<<<<<<< HEAD
 │   ├── combine_scores.m
 │   ├── generate_combinations.m
 │   ├── read_labels_table.m
@@ -128,7 +122,7 @@ You can also call it manually:
 
 2. Training (LEAPD): 
 cfg = struct;
-cfg.mode        = "classification";              % or "correlation"
+cfg.mode = "classification";              % or "correlation"
 =======
 │   ├── evaluate_correlation.m
 │   ├── combine_scores.m
@@ -169,19 +163,16 @@ You can also call it manually:
 ### 2. Training (LEAPD)
 ```matlab
 cfg = struct;
-cfg.mode        = "correlation";              % or "classification"
->>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
+cfg.mode = "correlation";              % or "classification"
 cfg.data_train  = "data/EEG_train.mat";
 cfg.labels_file = "data/ClinicalLabels.xlsx"; % columns: ID, Target
 cfg.save_dir    = "results/train_results";
 
 results_train = main_train(cfg);
-<<<<<<< HEAD
 
 3. Testing (Out-of-Sample): 
 cfg2 = struct;
-cfg2.mode            = "classification";          % or "correlation"          
-=======
+cfg2.mode = "classification";          % or "correlation"          
 ```
 
 ---
@@ -190,7 +181,6 @@ cfg2.mode            = "classification";          % or "correlation"
 ```matlab
 cfg2 = struct;
 cfg2.mode            = "correlation";                 
->>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
 cfg2.data_test       = "data/EEG_test.mat";
 cfg2.trained_model   = "results/train_results/BestParamsAll.mat";
 cfg2.labels_file     = "data/ClinicalLabels_Test.xlsx";
@@ -199,7 +189,7 @@ cfg2.max_full_combos = 5;
 cfg2.save_dir        = "results/test_results";
 
 results_test = main_test(cfg2);
-<<<<<<< HEAD
+
 
 Complete Pipeline Demo: Run complete demonstration pipeline: 
 
@@ -244,7 +234,7 @@ If you use this pipeline in academic or research work, please cite: Jamshidi, S.
 Released under the MIT License (with Citation Request). See the LICENSE file for details.
 
 For questions or technical support, please contact Simin Jamshidi at simin-jamshidi@uiowa.edu
-=======
+
 ```
 
 ---
@@ -288,4 +278,3 @@ If you use this pipeline in academic or research work, please cite:
 ## License
 Released under the **MIT License (with Citation Request)**.  
 See the [LICENSE](./LICENSE) file for details.
->>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
