@@ -1,6 +1,7 @@
 function results = main_train(cfg)
 % MAIN_TRAIN - Unified training for classification and correlation.
 
+<<<<<<< HEAD
 % Set default values if fields are missing
 if ~isfield(cfg, 'mode'), cfg.mode = "classification"; end
 if ~isfield(cfg, 'data_train'), error('data_train is required'); end
@@ -27,6 +28,41 @@ end
 valid_modes = ["classification", "correlation"];
 if ~any(strcmp(cfg.mode, valid_modes))
     error('mode must be "classification" or "correlation"');
+=======
+% cfg fields:
+%   .mode            : "classification" | "correlation"
+%   .data_train      : path to training EEG .mat (struct or nested cells)
+%   .labels_file     : table (xlsx/csv) with target variable for correlation
+%   .channel_list    : cellstr of channel names to consider (optional)
+%   .exclude_chans   : cellstr of noisy channels to skip (e.g., {'FT9','FT10','TP9','TP10'})
+%   .f1_grid         : vector (e.g., 0.1:0.1:0.5)
+%   .f2_grid         : vector (e.g., 1:1:100)
+%   .orders          : vector (e.g., 2:10)
+%   .save_dir        : 'results/train_results'
+%   .Fs              : sampling rate (default 500)
+%   .target_group    : 'group1'|'group2' (for correlation; target to correlate)
+%   .kfold           : 'loocv' or integer K (for classification)
+%   .is_norm_proj    : 0 or 1 (projection mode)
+%   .is_preprocessed : true/false - indicate if data is already preprocessed
+%   .detect_additional_noisy : true/false - auto-detect noisy channels
+
+arguments
+    cfg.mode (1,1) string {mustBeMember(cfg.mode,["classification","correlation"])}
+    cfg.data_train (1,1) string
+    cfg.labels_file (1,1) string = ""
+    cfg.channel_list = []
+    cfg.exclude_chans = {"FT9","FT10","TP9","TP10"} % Noisy_Channels
+    cfg.f1_grid = 0.1:0.1:0.5
+    cfg.f2_grid = 1:1:100
+    cfg.orders  = 2:10
+    cfg.save_dir (1,1) string = "results/train_results"
+    cfg.Fs (1,1) double = 500
+    cfg.target_group (1,1) string = "group1"
+    cfg.kfold = "loocv"
+    cfg.is_norm_proj (1,1) double = 0
+    cfg.is_preprocessed (1,1) logical = false
+    cfg.detect_additional_noisy (1,1) logical = true
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
 end
 
 % Create save directory if it doesn't exist
@@ -90,7 +126,11 @@ BestParamsAll = struct('channel',{}, 'cutoff',{}, 'order',{}, 'dim',{}, ...
 
 % Pre-read labels if needed for correlation
 labelsMap = containers.Map();
+<<<<<<< HEAD
 if strcmp(cfg.mode, "correlation")
+=======
+if cfg.mode == "correlation"
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
     if isempty(cfg.labels_file) || ~isfile(cfg.labels_file)
         error('For correlation mode, labels_file must be provided and exist');
     end
@@ -127,7 +167,11 @@ end
 
 % Main training loop per channel
 fprintf('\n🎯 Training per channel:\n');
+<<<<<<< HEAD
 for chIdx = 1:Nch
+=======
+parfor chIdx = 1:Nch
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
     ch = channels{chIdx};
     chData = DataTrain(ch);
     
@@ -174,7 +218,11 @@ for chIdx = 1:Nch
                 LPC_all = utils.compute_yw(Xf, ord);
                 dims = 1:(ord-1);
                 
+<<<<<<< HEAD
                 if strcmp(cfg.mode, "classification")
+=======
+                if cfg.mode == "classification"
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
                     % ---- CLASSIFICATION TRAINING ----
                     for d = dims
                         acc = local_loocv_accuracy(LPC_all, Classes, d, cfg.is_norm_proj);
@@ -205,7 +253,11 @@ for chIdx = 1:Nch
                 else
                     % ---- CORRELATION TRAINING ----
                     % Determine target group indices
+<<<<<<< HEAD
                     if strcmp(cfg.target_group, "group1")
+=======
+                    if cfg.target_group == "group1"
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
                         tgt_ids = SubjectIDs.(ch).group1;
                         tgt_idx = 1:numel(tgt_ids);
                     else
@@ -222,7 +274,11 @@ for chIdx = 1:Nch
                     for d = dims
                         % Build reference hyperplane from non-target group
                         if isfield(chData, 'group2') && ~isempty(chData.group2)
+<<<<<<< HEAD
                             if strcmp(cfg.target_group, "group1")
+=======
+                            if cfg.target_group == "group1"
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
                                 [P_ref, m_ref] = utils.build_hyperplanes(LPC_all(n1+1:end,:), d);
                                 [P_tar_full, m_tar_full] = utils.build_hyperplanes(LPC_all(1:n1,:), d);
                             else
@@ -239,7 +295,11 @@ for chIdx = 1:Nch
                         scores = zeros(numel(tgt_idx), 1);
                         for i = 1:numel(tgt_idx)
                             ti = tgt_idx(i);
+<<<<<<< HEAD
                             if strcmp(cfg.target_group, "group1")
+=======
+                            if cfg.target_group == "group1"
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
                                 tr_idx = setdiff(1:n1, ti);
                                 [P_tar, m_tar] = utils.build_hyperplanes(LPC_all(tr_idx,:), d);
                             else
@@ -285,12 +345,21 @@ for chIdx = 1:Nch
         bestRec.is_preprocessed = cfg.is_preprocessed;
         BestParamsAll(chIdx) = bestRec;
         
+<<<<<<< HEAD
         if strcmp(cfg.mode, "classification")
             fprintf('Best: f=[%.1f-%.1f]Hz, order=%d, dim=%d, ACC=%.2f%%\n', ...
                 bestRec.cutoff(1), bestRec.cutoff(2), bestRec.order, bestRec.dim, bestRec.metric);
         else
             fprintf('Best: f=[%.1f-%.1f]Hz, order=%d, dim=%d, ρ=%.3f\n', ...
                 bestRec.cutoff(1), bestRec.cutoff(2), bestRec.order, bestRec.dim, bestRec.metric);
+=======
+        if cfg.mode == "classification"
+            fprintf('Best: f=[%.1f-%.1f]Hz, order=%d, dim=%d, ACC=%.2f%%\n', ...
+                bestRec.cutoff(1), bestRec.cutoff(2), bestRec.order, bestRec.dim, bestRec.metric);
+        else
+            fprintf('Best: f=[%.1f-%.1f]Hz, order=%d, dim=%d, ρ=%.3f (p=%.3f)\n', ...
+                bestRec.cutoff(1), bestRec.cutoff(2), bestRec.order, bestRec.dim, bestRec.metric, p);
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
         end
     else
         fprintf('No valid parameters found for channel %s\n', ch);
@@ -336,8 +405,16 @@ function acc = local_loocv_accuracy(LPC_all, Classes, d, is_norm)
         [P0, m0] = utils.build_hyperplanes(LPC_all(tr(c0), :), d);
         
         s = utils.compute_leapd_scores(LPC_all(i, :), P0, m0, P1, m1, d, is_norm);
+<<<<<<< HEAD
         preds(i) = s >= 0.5;
     end
     
     acc = mean(double(preds) == Classes) * 100;
 end
+=======
+        preds(i) = s >= 0.5;  % CORRECT: >=0.5 = Group 1, <0.5 = Group 2
+    end
+    
+    acc = mean(double(preds) == Classes) * 100;
+end
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3

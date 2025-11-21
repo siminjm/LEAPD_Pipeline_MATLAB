@@ -1,6 +1,7 @@
 function results = main_test(cfg)
 % MAIN_TEST - Unified test for classification and correlation.
 
+<<<<<<< HEAD
 % Set default values if fields are missing
 if ~isfield(cfg, 'mode'), cfg.mode = "classification"; end
 if ~isfield(cfg, 'data_test'), error('data_test is required'); end
@@ -29,6 +30,21 @@ end
 if ~exist(cfg.save_dir,'dir')
     mkdir(cfg.save_dir);
 end
+=======
+arguments
+    cfg.mode (1,1) string {mustBeMember(cfg.mode,["classification","correlation"])}
+    cfg.data_test (1,1) string
+    cfg.trained_model (1,1) string
+    cfg.labels_file (1,1) string = ""
+    cfg.combo_sizes = 1:10
+    cfg.max_full_combos (1,1) double = 5
+    cfg.Fs (1,1) double = 500
+    cfg.is_norm_proj (1,1) double = 0
+    cfg.save_dir (1,1) string = "results/test_results"
+end
+
+if ~exist(cfg.save_dir,'dir'); mkdir(cfg.save_dir); end
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
 
 S = load(cfg.trained_model,'BestParamsAll'); 
 BestParamsAll = S.BestParamsAll;
@@ -52,7 +68,11 @@ TargetVec   = [];
 
 % ---- Correlation labels (if applicable) ----
 labelsMap = containers.Map();
+<<<<<<< HEAD
 if strcmp(cfg.mode, "correlation") && ~isempty(cfg.labels_file) && strlength(cfg.labels_file) > 0
+=======
+if cfg.mode == "correlation" && strlength(cfg.labels_file) > 0
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
     T = utils.read_labels_table(cfg.labels_file);
     if ~isempty(T)
         ids = string(T.ID);
@@ -76,7 +96,11 @@ for chIdx = 1:Nch
         AllData = [chData.group1, chData.group2];
         TL = [ones(numel(chData.group1),1); zeros(numel(chData.group2),1)];
         
+<<<<<<< HEAD
         if strcmp(cfg.mode, "correlation")
+=======
+        if cfg.mode == "correlation"
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
             grp_ids = [SubjectIDs.(char(ch)).group1; SubjectIDs.(char(ch)).group2];
             TargetVec = utils.fetch_targets(grp_ids, labelsMap);
         end
@@ -84,7 +108,11 @@ for chIdx = 1:Nch
         AllData = chData.group1;
         TL = ones(numel(AllData),1);
         
+<<<<<<< HEAD
         if strcmp(cfg.mode, "correlation")
+=======
+        if cfg.mode == "correlation"
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
             grp_ids = SubjectIDs.(char(ch)).group1;
             TargetVec = utils.fetch_targets(grp_ids, labelsMap);
         end
@@ -106,7 +134,11 @@ for chIdx = 1:Nch
     s = utils.compute_leapd_scores(LPC_test, P.P0_train, P.m0_train, P.P1_train, P.m1_train, P.dim, cfg.is_norm_proj);
 
     % 4. Apply trained polarity for correlation
+<<<<<<< HEAD
     if strcmp(cfg.mode,"correlation") && isfield(P,'polarity') && P.polarity==-1
+=======
+    if cfg.mode=="correlation" && isfield(P,'polarity') && P.polarity==-1
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
         s = 1 - s;
     end
 
@@ -121,7 +153,11 @@ results.combos = struct();
 
 % Single-channel metrics
 for j=1:Nch
+<<<<<<< HEAD
     if strcmp(cfg.mode,"classification")
+=======
+    if cfg.mode=="classification"
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
         metrics = utils.evaluate_classification(ScoresMatrix(:,j), TrueLabels);
     else
         metrics = utils.evaluate_correlation(ScoresMatrix(:,j), TargetVec);
@@ -142,7 +178,11 @@ for k = cfg.combo_sizes
     for i=1:size(combos,1)
         idx = combos(i,:);
         s = utils.combine_scores(ScoresMatrix(:,idx));
+<<<<<<< HEAD
         if strcmp(cfg.mode,"classification")
+=======
+        if cfg.mode=="classification"
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
             metrics = utils.evaluate_classification(s, TrueLabels);
             score = metrics.ACC;
         else
@@ -161,7 +201,11 @@ for k = cfg.combo_sizes
         best_prev(k).indices = best_k.indices;
     end
     fprintf('k=%d best: %s | ', k, strjoin(best_k.channels,', '));
+<<<<<<< HEAD
     if strcmp(cfg.mode,"classification")
+=======
+    if cfg.mode=="classification"
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
         fprintf('ACC=%.2f%%\n', best_k.metrics.ACC);
     else
         fprintf('Rho=%.3f (p=%.3g)\n', best_k.metrics.Rho, best_k.metrics.PValue);
@@ -170,4 +214,8 @@ end
 
 save(fullfile(cfg.save_dir,'test_results.mat'),'results','cfg');
 fprintf('\n Saved test results to %s\n', fullfile(cfg.save_dir,'test_results.mat'));
+<<<<<<< HEAD
 end
+=======
+end
+>>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
