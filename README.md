@@ -112,35 +112,6 @@ LEAPD_Pipeline_MATLAB/
 ├── LICENSE
 └── .gitignore
 
-## Quick Start
-
-1. (Optional) Preprocessing: Run the preprocessing demo to remove noise and artifacts: 
-cd Preprocessing
-Demo
-You can also call it manually: 
-[X_clean, labels_clean, report, savePath] = pipeline_preprocessing(X_raw, Fs, labels);
-
-2. Training (LEAPD): 
-cfg = struct;
-cfg.mode = "classification";              % or "correlation"
-=======
-│   ├── evaluate_correlation.m
-│   ├── combine_scores.m
-│   ├── generate_combinations.m
-│   ├── pick_polarity_and_rho.m
-│   ├── read_labels_table.m
-│   ├── fetch_targets.m
-│   ├── count_subjects.m
-│   └── save_results.m
-│
-├── results/
-│   ├── train_results/
-│   └── test_results/
-│
-├── README.md
-├── LICENSE
-└── .gitignore
-```
 
 ---
 
