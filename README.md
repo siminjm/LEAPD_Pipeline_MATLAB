@@ -1,77 +1,13 @@
+Here is your **README rewritten as one continuous section**, smoothly connected without separate headings, ready for GitHub:
+
+---
+
 # LEAPD Pipeline (MATLAB)
 
-Unified training, testing, and preprocessing framework for EEG-based classification using the LEAPD method. Developed by Simin Jamshidi, University of Iowa, Departments of Electrical & Computer Engineering (ECE) and Neurology.
+This repository provides a unified MATLAB-based framework for EEG preprocessing, feature extraction, classification, and correlation using the LEAPD (Linear Predictive Coding-based EEG Analysis for Prognosis and Diagnosis) method. It supports both binary classification tasks (such as predicting mortality: Deceased vs. Living subjects) and correlation analyses (assessing associations between LEAPD scores and clinical measures such as MoCA or UPDRS). The pipeline is designed to be modular, reproducible, and research-friendly. It includes optional EEG preprocessing using EEGLAB and ICLabel, with capabilities for detecting and removing noisy channels, applying ICA-based artifact rejection (blink, muscle, cardiac), performing line noise removal (60 Hz notch filtering), visualizing raw versus cleaned EEG, and automatically exporting cleaned EEG data to the `/cleaned_data/` folder. The core LEAPD pipeline performs automatic parameter search over filter ranges and LPC orders, supports single- and multi-channel analysis (1–10 channels), performs cross-validation and out-of-sample testing, applies polarity alignment for correlation, and evaluates comprehensive performance metrics, including ACC, AUC, SEN, SPC, PPV, NPV, Odds Ratio, LR⁺, Spearman’s rho, and p-values. The repository also includes result storage, report generation, and visualization utilities.
 
-## Overview
+The folder structure is organized as follows:
 
-This repository provides a full MATLAB workflow for EEG analysis using the LEAPD (Linear Predictive Coding-based EEG Analysis for Prognosis and Diagnosis) approach.
-
-It now includes: EEG Preprocessing module (EEGLAB + ICLabel) for artifact detection and cleaning, Training and testing modules for LEAPD-based classification.
-
-The pipeline supports: Binary classification (e.g., Deceased vs Living subjects).
-=======
-Unified training, testing, and preprocessing framework for EEG-based classification and correlation using the **LEAPD** method.  
-Developed by **Simin Jamshidi**, *University of Iowa*, Departments of **Electrical & Computer Engineering (ECE)** and **Neurology**.
-
----
-
-## Overview
-This repository provides a full **MATLAB workflow** for EEG analysis using the **LEAPD (Linear Predictive Coding-based EEG Analysis for Prognosis and Diagnosis)** approach.
-
-It now includes:
-- **EEG Preprocessing module** (EEGLAB + ICLabel) for artifact detection and cleaning  
-- **Training and testing modules** for LEAPD-based classification and correlation analyses  
-
-The pipeline supports:
-- **Binary classification** (e.g., Deceased vs Living subjects)  
-- **Correlation analysis** (e.g., LEAPD indices vs clinical scores such as MoCA or UPDRS)
-
----
-
-
-## Core Features
-
-### Preprocessing
-
-Optional preprocessing using EEGLAB and ICLabel, Automatic detection and removal of noisy channels, ICA-based artifact removal (blink, muscle, heart), Optional 60 Hz notch filter and harmonics suppression, Visualization of raw vs cleaned EEG signals, Automatic saving of cleaned EEG to /cleaned_data/.
-
-To run the standalone preprocessing demo: cd Preprocessing then Demo.
-
-You can also call it manually: 
-```
-
-[X_clean, labels_clean, report, savePath] = pipeline_preprocessing(X_raw, Fs, labels);
-```
-### LEAPD Pipeline
-Automatic parameter search over filter bands and LPC orders, Single- and multi-channel evaluation (1–10 channels), Cross-validation and out-of-sample testing, Comprehensive metrics: ACC, AUC, SEN, SPC, PPV, NPV, OR, LR⁺.
-
-## Repository Structure
-
-- Optional preprocessing using EEGLAB and ICLabel  
-- Automatic detection and removal of noisy channels  
-- ICA-based artifact removal (blink, muscle, heart)  
-- Optional 60 Hz notch filter and harmonics suppression  
-- Visualization of raw vs. cleaned EEG signals  
-- Automatic saving of cleaned EEG to `/cleaned_data/`
-
-To run the standalone preprocessing demo:
-```matlab
-cd Preprocessing
-Demo
-```
-
----
-
-### LEAPD Pipeline
-- Automatic parameter search over filter bands and LPC orders  
-- Single- and multi-channel evaluation (1–10 channels)  
-- Cross-validation and out-of-sample testing  
-- Correlation polarity alignment  
-- Comprehensive metrics: ACC, AUC, SEN, SPC, PPV, NPV, OR, LR⁺, ρ, p-value  
-
----
-
-## Repository Structure
 ```
 LEAPD_Pipeline_MATLAB/
 ├── Preprocessing/                   # EEG artifact removal module
@@ -79,12 +15,8 @@ LEAPD_Pipeline_MATLAB/
 │   ├── pipeline_preprocessing.m
 │   ├── detect_noisy_channels.m
 │   ├── remove_line_noise.m
-│   ├── README.md
-│   └── cleaned_data/
-├── main_train.m                     # LEAPD training script
-├── main_test.m                      # LEAPD testing script
-├── plot_results.m                   # Visualization
-├── leapd_demo.m                     # Complete classification demo
+│   ├── cleaned_data/
+│   └── README.md
 │
 ├── main_train.m                     # LEAPD training script
 ├── main_test.m                      # LEAPD testing script
@@ -98,156 +30,66 @@ LEAPD_Pipeline_MATLAB/
 │   ├── build_hyperplanes.m
 │   ├── compute_leapd_scores.m
 │   ├── evaluate_classification.m
+│   ├── evaluate_correlation.m
 │   ├── combine_scores.m
 │   ├── generate_combinations.m
+│   ├── pick_polarity_and_rho.m
 │   ├── read_labels_table.m
 │   ├── fetch_targets.m
 │   ├── count_subjects.m
-│   ├── save_results.m
-│   ├── create_datasets.m            # Synthetic data for classification
-│   ├── detect_preprocessing_status.m
-│   └── detect_additional_noisy_channels.m
+│   └── save_results.m
+│
 ├── results/
 │   ├── train_results/
 │   └── test_results/
+│
 ├── README.md
 ├── LICENSE
 └── .gitignore
-
-
----
-
-## Quick Start
-
-### 1. (Optional) Preprocessing
-Run the preprocessing demo to remove noise and artifacts:
-```matlab
-cd Preprocessing
-Demo
 ```
 
-You can also call it manually:
+To run preprocessing, you can navigate to the `/Preprocessing` folder and execute `Demo.m`, or use the function directly as:
+
 ```matlab
 [X_clean, labels_clean, report, savePath] = pipeline_preprocessing(X_raw, Fs, labels);
 ```
 
----
+The training phase is initiated using:
 
-### 2. Training (LEAPD)
 ```matlab
 cfg = struct;
-cfg.mode = "correlation";              % or "classification"
+cfg.mode        = "classification";    % or "correlation"
 cfg.data_train  = "data/EEG_train.mat";
-cfg.labels_file = "data/ClinicalLabels.xlsx"; % columns: ID, Target
+cfg.labels_file = "data/ClinicalLabels.xlsx";   % columns: ID, Target
 cfg.save_dir    = "results/train_results";
-
 results_train = main_train(cfg);
-
-3. Testing (Out-of-Sample): 
-cfg2 = struct;
-cfg2.mode = "classification";          % or "correlation"          
 ```
 
----
+The testing (out-of-sample evaluation) is performed using:
 
-### 3. Testing (Out-of-Sample)
 ```matlab
 cfg2 = struct;
-cfg2.mode            = "correlation";                 
+cfg2.mode            = "correlation";         
 cfg2.data_test       = "data/EEG_test.mat";
 cfg2.trained_model   = "results/train_results/BestParamsAll.mat";
 cfg2.labels_file     = "data/ClinicalLabels_Test.xlsx";
 cfg2.combo_sizes     = 1:10;
 cfg2.max_full_combos = 5;
 cfg2.save_dir        = "results/test_results";
-
 results_test = main_test(cfg2);
-
-
-Complete Pipeline Demo: Run complete demonstration pipeline: 
-
-% For classification (mortality prediction)
-leapd_demo();
-
-% For correlation (MoCA score prediction)  
-leapd_demo_correlation();
-
-% Generate synthetic data for classification
-utils.create_datasets();
-
-Create synthetic datasets for testing:
-
-% Generate synthetic data with MoCA scores for correlation
-utils.create_moca_datasets();
-
-## Data Format
-
-Your EEG data should be structured as: EEG: 1×C cell array, each containing {group1_data, group2_data}, Channel_location: 1×C cell array of channel names, Filenames: Struct with group1 and group2 subject IDs.
-
-## Data Privacy Notice
-
-Due to clinical confidentiality agreements, the original EEG datasets used in this research cannot be shared publicly. However, the entire analysis pipeline, algorithms, and reproducible code structure are fully provided to ensure transparency. All stages—from preprocessing to LEAPD evaluation—can be executed using synthetic or anonymized EEG data.
-
-## Skills Demonstrated
-
-MATLAB — advanced EEG signal processing and algorithm design, EEG Preprocessing — ICA, ICLabel, and noise/artifact removal, Feature Extraction — LPC coefficients and hyperplane distances, Statistical Analysis — classification metrics, AUC, OR, LR⁺, Reproducible Research — modular, documented, version-controlled workflow.
-
-## Authors
-
-Simin Jamshidi — Ph.D. Candidate, Departments of Electrical & Computer Engineering (ECE) and Neurology, University of Iowa.
-
-Supervisors: Prof. Soura Dasgupta and Dr. Nandakumar Narayanan.
-
-## Citation
-
-If you use this pipeline in academic or research work, please cite: Jamshidi, S., et al. (Year). EEG-Based Mortality and Cognitive Decline Prediction in Parkinson's Disease using the LEAPD Method. Departments of Electrical & Computer Engineering (ECE) and Neurology, University of Iowa. (Preprint or Journal Reference — to be updated)
-
-## License
-
-Released under the MIT License (with Citation Request). See the LICENSE file for details.
-
-For questions or technical support, please contact Simin Jamshidi at simin-jamshidi@uiowa.edu
-
 ```
 
----
+Due to clinical confidentiality agreements, the original EEG datasets cannot be shared publicly. However, the full pipeline, algorithms, and code structure are provided to fully support reproducibility. All stages—from preprocessing to LEAPD evaluation—can be executed using synthetic or anonymized EEG data.
 
-## Data Privacy Notice
-Due to clinical confidentiality agreements, the original EEG datasets used in this research cannot be shared publicly.  
-However, the **entire analysis pipeline**, algorithms, and reproducible code structure are fully provided to ensure transparency.  
-All stages—from preprocessing to LEAPD evaluation—can be executed using **synthetic or anonymized EEG data**.
+Key skills demonstrated in this pipeline include MATLAB-based EEG signal processing, ICA and noise/artifact removal, LPC feature extraction, distance-based hyperplane modeling, statistical evaluation using classification and correlation metrics, and reproducible, modular design for scientific workflows.
 
----
+Developed by **Simin Jamshidi**, Ph.D. Candidate in the Departments of Electrical & Computer Engineering (ECE) and Neurology at the University of Iowa, under the supervision of Prof. **Soura Dasgupta** and Dr. **Nandakumar Narayanan**.
 
-## Skills Demonstrated
-- **MATLAB** — advanced EEG signal processing and algorithm design  
-- **EEG Preprocessing** — ICA, ICLabel, and noise/artifact removal  
-- **Feature Extraction** — LPC coefficients and hyperplane distances  
-- **Statistical Analysis** — correlation, classification metrics, AUC, OR, LR⁺  
-- **Reproducible Research** — modular, documented, version-controlled workflow  
-
----
-
-## Authors
-**Simin Jamshidi** — Ph.D. Candidate  
-Departments of **Electrical & Computer Engineering (ECE)** and **Neurology**  
-**University of Iowa**
-
-Supervisors:  
-**Prof. Soura Dasgupta** and **Dr. Nandakumar Narayanan**
-
----
-
-## Citation
 If you use this pipeline in academic or research work, please cite:
 
-> Jamshidi, S., et al. (Year).  
-> *EEG-Based Mortality and Cognitive Decline Prediction in Parkinson’s Disease using the LEAPD Method.*  
-> Departments of Electrical & Computer Engineering (ECE) and Neurology, University of Iowa.  
+> Jamshidi, S., et al. (Year).
+> *EEG-Based Mortality and Cognitive Decline Prediction in Parkinson’s Disease using the LEAPD Method.*
+> Departments of Electrical & Computer Engineering (ECE) and Neurology, University of Iowa.
 > (Preprint or Journal Reference — to be updated)
 
----
-
-## License
-Released under the **MIT License (with Citation Request)**.  
-See the [LICENSE](./LICENSE) file for details.
+Released under the **MIT License with citation request**. See LICENSE for details.
