@@ -1,7 +1,5 @@
 function plot_results(results_path)
-<<<<<<< HEAD
 % PLOT_RESULTS - Generates accurate plots for LEAPD results using actual metrics
-=======
 % PLOT_RESULTS - Automatically generates ROC, barplot, heatmap, and correlation plots for LEAPD results.
 %
 % Usage:
@@ -12,7 +10,6 @@ function plot_results(results_path)
 % --------------------------------------------------------------
 % Author: Simin Jamshidi (University of Iowa)
 % --------------------------------------------------------------
->>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
 
 if nargin < 1
     error('Please provide the path to your test_results.mat file.');
@@ -24,19 +21,12 @@ if ~isfield(S, 'results')
 end
 results = S.results;
 
-<<<<<<< HEAD
-% Detect mode
-=======
 % Detect mode if cfg saved
->>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
 if isfield(S, 'cfg') && isfield(S.cfg, 'mode')
     mode_type = string(S.cfg.mode);
     fprintf('Detected mode: %s\n', mode_type);
 else
-<<<<<<< HEAD
-=======
     % Fallback detection from metrics
->>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
     if isfield(results.single(1).metrics, 'ACC')
         mode_type = "classification";
     elseif isfield(results.single(1).metrics, 'Rho')
@@ -51,7 +41,6 @@ save_dir = fileparts(results_path);
 fig_dir = fullfile(save_dir, 'figures');
 if ~exist(fig_dir, 'dir'), mkdir(fig_dir); end
 
-<<<<<<< HEAD
 fprintf('Generating plots for %s mode...\n', mode_type);
 
 % --------------------------------------------------------------
@@ -158,7 +147,6 @@ end
 if isfield(results, 'single')
     figure('Position', [100, 100, 800, 600]);
     
-=======
 % --------------------------------------------------------------
 % ROC Curve (classification)
 % --------------------------------------------------------------
@@ -212,12 +200,10 @@ end
 % Channel Heatmap
 % --------------------------------------------------------------
 if isfield(results, 'single')
->>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
     channels = string({results.single.channel});
     if strcmp(mode_type, "classification")
         vals = arrayfun(@(x) x.metrics.ACC, results.single);
         metricLabel = 'Accuracy (%)';
-<<<<<<< HEAD
         titleStr = 'Channel-wise Classification Accuracy';
     else
         vals = arrayfun(@(x) x.metrics.Rho, results.single);
@@ -287,7 +273,6 @@ fprintf('   - Channel_Ranking.png\n');
 fprintf('   - Performance_vs_Channels.png\n');
 
 end
-=======
     elseif strcmp(mode_type, "correlation")
         vals = arrayfun(@(x) x.metrics.Rho, results.single);
         metricLabel = 'Spearman \rho';
@@ -340,4 +325,3 @@ end
 
 fprintf('\n All plots saved in: %s\n', fig_dir);
 end
->>>>>>> 1d3c1c50f5902e6c14525e27bec3384c139e60b3
