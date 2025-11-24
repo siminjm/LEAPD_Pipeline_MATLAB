@@ -12,7 +12,7 @@ The folder structure is organized as follows:
 ```
 LEAPD_Pipeline_MATLAB/
 ├── Preprocessing/                   # EEG artifact removal module
-│   ├── Demo.m
+│   ├── leapd_demo.m
 │   ├── pipeline_preprocessing.m
 │   ├── detect_noisy_channels.m
 │   ├── remove_line_noise.m
