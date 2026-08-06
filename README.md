@@ -85,7 +85,7 @@ Due to clinical confidentiality agreements, the original EEG datasets cannot be 
 
 Key skills demonstrated in this pipeline include MATLAB-based EEG signal processing, ICA and noise/artifact removal, LPC feature extraction, distance-based hyperplane modeling, statistical evaluation using classification and correlation metrics, and reproducible, modular design for scientific workflows.
 
-Developed by **Simin Jamshidi**, Ph.D. Candidate in the Departments of Electrical & Computer Engineering (ECE) and Neurology at the University of Iowa, under the supervision of Prof. **Soura Dasgupta** and Dr. **Nandakumar Narayanan**.
+Developed by **Simin J Visser**, Ph.D. Candidate in the Departments of Electrical & Computer Engineering (ECE) and Neurology at the University of Iowa.
 
 If you use this pipeline in academic or research work, please cite:
 
